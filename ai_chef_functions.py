@@ -196,8 +196,8 @@ class AIChefAdvisor:
             if not self.api_key:
                 return {"error": "❌ 未設置 GEMINI_API_KEY\n\n請在 .env 文件中添加：\nGEMINI_API_KEY=your_api_key_here\n\n獲取 API Key: https://ai.google.dev"}
             
-            # 嘗試使用最新的穩定 Gemini 模型
-            models_to_try = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
+            # 嘗試最新的穩定 Gemini 模型（2025年最新版本）
+            models_to_try = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-pro']
             
             for model_name in models_to_try:
                 try:
@@ -592,8 +592,8 @@ class AIChefAdvisor:
             if not self.api_key:
                 return "❌ 未設置 GEMINI_API_KEY\n請在 .env 文件中添加 API Key"
             
-            # 嘗試使用最新的穩定 Gemini 模型
-            models_to_try = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
+            # 嘗試最新的穩定 Gemini 模型（2025年最新版本）
+            models_to_try = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-pro']
             
             for model_name in models_to_try:
                 try:
