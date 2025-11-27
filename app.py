@@ -3,8 +3,8 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-# 加載 .env 文件
-load_dotenv()
+# 加載 .env 文件 (強制重新加載)
+load_dotenv(override=True)
 
 # 導入 AI 模組
 try:
@@ -13,8 +13,13 @@ try:
 except ImportError:
     AI_AVAILABLE = False
 
-# 檢查 API Key 是否配置
-HAS_API_KEY = bool(os.getenv("OPENAI_API_KEY") or os.getenv("GEMINI_API_KEY"))
+# 檢查 API Key 是否配置 (優先檢查 Gemini)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+HAS_API_KEY = bool(GEMINI_API_KEY or OPENAI_API_KEY)
+
+# 調試：在側邊欄顯示 API Key 狀態
+DEBUG_MODE = os.getenv("DEBUG_MODE", "false").lower() == "true"
 
 # 設置頁面配置
 st.set_page_config(
@@ -78,6 +83,18 @@ with st.sidebar:
     st.write(f"**上次更新**: {datetime.now().strftime('%Y-%m-%d')}")
     st.divider()
     
+    # API 狀態檢查
+    st.markdown("### 🔑 API 狀態")
+    if GEMINI_API_KEY:
+        st.success(f"✅ Gemini API: 已設置")
+    else:
+        st.error("❌ Gemini API: 未設置")
+    
+    if OPENAI_API_KEY:
+        st.success(f"✅ OpenAI API: 已設置")
+    else:
+        st.warning("⚠️ OpenAI API: 未設置")
+    
     st.divider()
     st.markdown("### 💡 使用提示")
     st.markdown("""
@@ -87,9 +104,27 @@ with st.sidebar:
     """)
 
 # 主要功能
-if not AI_AVAILABLE or not HAS_API_KEY:
-    st.error("❌ AI 功能未啟用")
-    st.warning("請設置 OPENAI_API_KEY 或 GEMINI_API_KEY，然後重啟應用")
+if not AI_AVAILABLE:
+    st.error("❌ AI 模組加載失敗")
+    st.info("請確保 ai_chef_functions.py 在同一目錄中")
+elif not HAS_API_KEY:
+    st.error("❌ AI 功能未啟用 - 缺少 API Key")
+    st.warning("""
+    ### 設置 API Key 步驟：
+    
+    **方式 1: 使用 Google Gemini API (推薦免費)**
+    1. 訪問 https://ai.google.dev/
+    2. 點擊 "Get API Key"
+    3. 複製 API Key
+    4. 在 `.env` 文件中添加：`GEMINI_API_KEY=your_key_here`
+    5. 重啟 Streamlit 應用
+    
+    **方式 2: 使用 OpenAI API (付費)**
+    1. 訪問 https://platform.openai.com/api-keys
+    2. 複製 API Key
+    3. 在 `.env` 文件中添加：`OPENAI_API_KEY=your_key_here`
+    4. 重啟 Streamlit 應用
+    """)
 else:
     # 使用 Tabs 將兩個功能並排顯示
     tab1, tab2 = st.tabs(["💬 AI Chef Assistant", "✨ Recipe Generator"])
