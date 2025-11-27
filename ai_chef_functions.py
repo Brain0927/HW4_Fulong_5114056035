@@ -192,8 +192,12 @@ class AIChefAdvisor:
     def _generate_with_gemini(self, prompt: str, task_type: str) -> Dict:
         """使用 Google Gemini API 生成內容"""
         try:
-            # 嘗試使用最新的 gemini-2.5-flash，失敗則回退到 gemini-pro
-            models_to_try = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro']
+            # 檢查 API Key
+            if not self.api_key:
+                return {"error": "❌ 未設置 GEMINI_API_KEY\n\n請在 .env 文件中添加：\nGEMINI_API_KEY=your_api_key_here\n\n獲取 API Key: https://ai.google.dev"}
+            
+            # 嘗試使用最新的穩定 Gemini 模型
+            models_to_try = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
             
             for model_name in models_to_try:
                 try:
@@ -216,10 +220,10 @@ class AIChefAdvisor:
                     # 嘗試下一個模型
                     continue
             
-            return {"error": "所有 Gemini 模型都不可用"}
+            return {"error": "❌ 所有 Gemini 模型都不可用\n請檢查：\n1. API Key 是否正確\n2. 網路連接\n3. 服務狀態"}
         
         except Exception as e:
-            return {"error": f"Gemini API 錯誤: {str(e)}"}
+            return {"error": f"❌ Gemini API 錯誤: {str(e)}"}
     
     def _generate_with_local(self, prompt: str, task_type: str) -> Dict:
         """本地生成（回退方案）"""
@@ -584,8 +588,12 @@ class AIChefAdvisor:
     def _chat_with_gemini(self) -> str:
         """使用 Gemini 進行對話"""
         try:
-            # 嘗試使用最新的 Gemini 模型
-            models_to_try = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro']
+            # 檢查 API Key
+            if not self.api_key:
+                return "❌ 未設置 GEMINI_API_KEY\n請在 .env 文件中添加 API Key"
+            
+            # 嘗試使用最新的穩定 Gemini 模型
+            models_to_try = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']
             
             for model_name in models_to_try:
                 try:
@@ -607,7 +615,7 @@ class AIChefAdvisor:
                     # 嘗試下一個模型
                     continue
             
-            return "❌ 所有 Gemini 模型都不可用"
+            return "❌ 所有 Gemini 模型都不可用\n請檢查 API Key 和網路連接"
         
         except Exception as e:
             return f"❌ 對話出錯: {str(e)}"
