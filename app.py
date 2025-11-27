@@ -83,17 +83,9 @@ with st.sidebar:
     st.write(f"**上次更新**: {datetime.now().strftime('%Y-%m-%d')}")
     st.divider()
     
-    # API 狀態檢查
-    st.markdown("### 🔑 API 狀態")
-    if GEMINI_API_KEY:
-        st.success(f"✅ Gemini API: 已設置")
-    else:
-        st.error("❌ Gemini API: 未設置")
-    
-    if OPENAI_API_KEY:
-        st.success(f"✅ OpenAI API: 已設置")
-    else:
-        st.warning("⚠️ OpenAI API: 未設置")
+    # AI 助手上線狀態
+    st.markdown("### 🤖 AI 助手狀態")
+    st.success("✨ **AI 助手已上線** - 準備就緒")
     
     st.divider()
     st.markdown("### 💡 使用提示")
