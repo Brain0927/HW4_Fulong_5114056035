@@ -63,11 +63,28 @@ st.markdown("""
         border-radius: 10px;
         margin: 10px 0;
     }
-    /* Enlarge Tab Labels */
+    /* Tab 樣式 - 加上背景色和更大文字 */
     button[data-baseweb="tab"] {
-        font-size: 18px !important;
+        font-size: 20px !important;
         font-weight: bold !important;
-        padding: 15px 30px !important;
+        padding: 15px 40px !important;
+        background-color: #f0f2f6 !important;
+        color: #1f77b4 !important;
+        border-radius: 8px !important;
+        margin: 5px !important;
+        transition: all 0.3s ease !important;
+    }
+    /* 選中的 Tab */
+    button[data-baseweb="tab"][aria-selected="true"] {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FFA500 100%) !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3) !important;
+    }
+    /* Tab 懸停效果 */
+    button[data-baseweb="tab"]:hover {
+        background-color: #e8eef5 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
 </style>
 """, unsafe_allow_html=True)
